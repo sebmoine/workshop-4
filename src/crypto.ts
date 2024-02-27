@@ -68,7 +68,8 @@ export async function importPubKey(strKey: string): Promise<webcrypto.CryptoKey>
       'spki',
       arrayBuffer,
       {
-        hash: 'SHA-256',
+        name: 'RSA-OAEP',
+        hash: 'SHA-256'
       },
       false,
       ['encrypt']
@@ -89,7 +90,8 @@ export async function importPrvKey(strKey: string): Promise<webcrypto.CryptoKey>
       'pkcs8', // Import as PKCS#8 format for private key
       arrayBuffer,
       {
-        hash: 'SHA-256', // Hash function (adjust if needed)
+        name: 'RSA-OAEP',
+        hash: 'SHA-256'
       },
       false,
       ['decrypt']
