@@ -51,7 +51,7 @@ export async function exportPubKey(key: webcrypto.CryptoKey): Promise<string> {
 // Export a crypto private key to a base64 string format
 export async function exportPrvKey(key: webcrypto.CryptoKey | null): Promise<string | null> {
   try {
-    const exportedPrivKey = await crypto.subtle.exportKey("pkcs8", key);
+    const exportedPrivKey = await crypto.subtle.exportKey("jwk", key);
     const privKeyBase64Key = arrayBufferToBase64(exportedPrivKey);
   } catch (err) {
     console.error("Error exporting public key:", err);
@@ -74,12 +74,12 @@ export async function importPubKey(strKey: string): Promise<webcrypto.CryptoKey>
       false,
       ['encrypt']
     );
+    return {importedPubKey} as any;
   }
   catch (err) {
     console.error("Error importing public key:", err);
     throw err;
   }
-  return {importedPubKey} as any;
 }
 
 // Import a base64 string private key to its native format
@@ -96,12 +96,12 @@ export async function importPrvKey(strKey: string): Promise<webcrypto.CryptoKey>
       false,
       ['decrypt']
     );
+    return {importedPrivKey} as any;
   }
   catch (err) {
     console.error("Error importing private key:", err);
     throw err;
   }
-  return {importedPrivKey} as any;
 }
 
 // Encrypt a message using an RSA public key
