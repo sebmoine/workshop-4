@@ -131,7 +131,8 @@ export async function rsaDecrypt(data: string,privateKey: webcrypto.CryptoKey): 
     const dataBuffer = base64ToArrayBuffer(data);
     const decryptedData = await crypto.subtle.decrypt(
       {
-        hash: 'SHA-256',
+        name: 'RSA-OAEP',
+        hash: 'SHA-256'
       },
       privateKey,
       dataBuffer
@@ -162,12 +163,12 @@ export async function createRandomSymmetricKey(): Promise<webcrypto.CryptoKey> {
       extractable,
       ['encrypt', 'decrypt']
     );
+    return {generatedKey} as any;
   }
   catch (err) {
     console.error("Error generating symmetric key:", err);
     throw err;
   }
-  return {generatedKey} as any;
 }
 
 // Export a crypto symmetric key to a base64 string format
@@ -197,12 +198,12 @@ export async function importSymKey(strKey: string): Promise<webcrypto.CryptoKey>
       false,
       ['encrypt', 'decrypt']
     );
+    return {importedKey} as any;
   }
   catch (err) {
     console.error("Error importing symmetric key:", err);
     throw err;
   }
-  return {importedKey} as any;
 }
 
 // Encrypt a message using a symmetric key
