@@ -26,7 +26,7 @@ type GenerateRsaKeyPair = {
 };
 export async function generateRsaKeyPair(): Promise<GenerateRsaKeyPair> {
   const { publicKey, privateKey } = await crypto.subtle.generateKey({
-    name: 'rsa',
+    name: 'RSA-PSS',
     modulusLength: 4096,
     publicExponent: new Uint8Array([1,0,1]),
   }, true,
