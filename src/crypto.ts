@@ -25,23 +25,13 @@ type GenerateRsaKeyPair = {
   privateKey: webcrypto.CryptoKey;
 };
 export async function generateRsaKeyPair(): Promise<GenerateRsaKeyPair> {
-  try {
-    const { publicKey, privateKey } = await crypto.subtle.generateKey('rsa', {
-      modulusLength: 4096,
-      publicExponent: new Uint8Array([1, 0, 1]), // Valeur par défaut
-      publicKeyEncoding: { 
-        type: 'pkcsi', 
-      }, 
-      privateKeyEncoding: { 
-        type: 'pkcs8', 
-      }, 
-      hash: 'SHA-256',
-    },
-  }
-  catch (err) {
-    console.error("Erreur lors de la génération des clés :", err);
-    throw err;
-  }
+  const { publicKey, privateKey } = await crypto.subtle.generateKey({
+    name: 'rsa',
+    modulusLength: 4096,
+    publicExponent: new Uint8Array([1,0,1]),
+  }, true,
+  ['encrypt', 'decrypt']
+  );
   return { publicKey: {pubKey} as any, privateKey: {privKey} as any };
 }
 
