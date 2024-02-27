@@ -111,7 +111,7 @@ export async function rsaEncrypt(b64Data: string,strPublicKey: string): Promise<
     const dataBuffer = base64ToArrayBuffer(b64Data);
     const encryptedData = await crypto.subtle.encrypt(
       {
-        hash: 'SHA-256',
+        name: 'RSA-OAEP'
       },
       publicKey,
       dataBuffer
@@ -131,8 +131,7 @@ export async function rsaDecrypt(data: string,privateKey: webcrypto.CryptoKey): 
     const dataBuffer = base64ToArrayBuffer(data);
     const decryptedData = await crypto.subtle.decrypt(
       {
-        name: 'RSA-OAEP',
-        hash: 'SHA-256'
+        name: 'RSA-OAEP'
       },
       privateKey,
       dataBuffer
