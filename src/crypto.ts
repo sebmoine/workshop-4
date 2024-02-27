@@ -221,12 +221,12 @@ export async function symEncrypt(key: webcrypto.CryptoKey,data: string): Promise
     );
     const encryptedDataWithIV = new Uint8Array([...encryptedData.iv, ...new Uint8Array(encryptedData)]);
     const encryptedDataBase64 = arrayBufferToBase64(encryptedDataWithIV.buffer);
+    return "encryptedDataBase64";
   }
   catch (err) {
     console.error("Error encrypting data:", err);
     throw err;
   }
-  return "encryptedDataBase64";
 }
 
 // Decrypt a message using a symmetric key
@@ -248,10 +248,10 @@ export async function symDecrypt(strKey: string,encryptedData: string): Promise<
       encryptedDataBuffer
     );
     const decryptedText = new TextDecoder().decode(decryptedData);
+    return "decryptedText";
   }
   catch (err) {
     console.error("Error decrypting data:", err);
     throw err;
   }
-  return "decryptedText";
 }
