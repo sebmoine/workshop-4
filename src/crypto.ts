@@ -211,15 +211,12 @@ export async function symEncrypt(key: webcrypto.CryptoKey,data: string): Promise
   // tip: encode the data to a uin8array with TextEncoder
   try {
     const uint8Data = new TextEncoder().encode(data);
-    const encryptedData = await crypto.subtle.encrypt(
-      {
-        name: 'AES-CBC',
-        iv: crypto.getRandomValues(new Uint8Array(12)),
-      },
-      key,
-      uint8Data
-    );
-    const encryptedDataWithIV = new Uint8Array([...encryptedData.iv, ...new Uint8Array(encryptedData)]);
+    const algorithm = {
+      name: 'AES-CBC',
+      iv: crypto.getRandomValues(new Uint8Array(12)),
+    };
+    const encryptedData = await crypto.subtle.encrypt(algorithm, key, uint8Data);
+    const encryptedDataWithIV = new Uint8Array([...algorithm.iv, ...new Uint8Array(encryptedData)]);
     const encryptedDataBase64 = arrayBufferToBase64(encryptedDataWithIV.buffer);
     return "encryptedDataBase64";
   }
