@@ -33,7 +33,7 @@ export async function generateRsaKeyPair(): Promise<GenerateRsaKeyPair> {
   }, true,
   ['encrypt', 'decrypt']
   );
-  return { publicKey: {pubKey} as any, privateKey: {privKey} as any };
+  return { publicKey: {publicKey} as any, privateKey: {privateKey} as any };
 }
 
 // Export a crypto public key to a base64 string format
