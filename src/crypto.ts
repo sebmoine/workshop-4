@@ -39,7 +39,7 @@ export async function generateRsaKeyPair(): Promise<GenerateRsaKeyPair> {
 // Export a crypto public key to a base64 string format
 export async function exportPubKey(key: webcrypto.CryptoKey): Promise<string> {
   try {
-    const exportedPubKey = await crypto.subtle.exportKey("jwk", key);
+    const exportedPubKey = await crypto.subtle.exportKey("spki", key);
     const pubKeyBase64Key = arrayBufferToBase64(exportedPubKey);
   } catch (err) {
     console.error("Error exporting public key:", err);
@@ -51,8 +51,8 @@ export async function exportPubKey(key: webcrypto.CryptoKey): Promise<string> {
 // Export a crypto private key to a base64 string format
 export async function exportPrvKey(key: webcrypto.CryptoKey | null): Promise<string | null> {
   try {
-    const exportedPubKey = await crypto.subtle.exportKey("spki", key);
-    const privKeyBase64Key = arrayBufferToBase64(exportedPubKey);
+    const exportedPrivKey = await crypto.subtle.exportKey("pkcs8", key);
+    const privKeyBase64Key = arrayBufferToBase64(exportedPrivKey);
   } catch (err) {
     console.error("Error exporting public key:", err);
     throw err;
