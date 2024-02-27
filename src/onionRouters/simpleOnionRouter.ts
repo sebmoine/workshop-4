@@ -27,6 +27,11 @@ export async function simpleOnionRouter(nodeId: number) {
     res.json({ result: decryptedMessage });
   });
 
+  // Implement the getLastMessageDestination route
+  onionRouter.get("/getLastMessageDestination", (req, res) => {
+    res.json({ result: nextDestination });
+  });
+  
   const server = onionRouter.listen(BASE_ONION_ROUTER_PORT + nodeId, () => {
     console.log(
       `Onion router ${nodeId} is listening on port ${
