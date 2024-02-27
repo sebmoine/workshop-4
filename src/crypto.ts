@@ -26,8 +26,8 @@ type GenerateRsaKeyPair = {
 };
 export async function generateRsaKeyPair(): Promise<GenerateRsaKeyPair> {
   const { publicKey, privateKey } = await crypto.subtle.generateKey({
-    name: 'RSA-PSS',
-    modulusLength: 4096,
+    name: 'RSA-OAEP',
+    modulusLength: 2048,
     publicExponent: new Uint8Array([1,0,1]),
   }, true,
   ['encrypt', 'decrypt']
@@ -150,8 +150,8 @@ export async function rsaDecrypt(data: string,privateKey: webcrypto.CryptoKey): 
 export async function createRandomSymmetricKey(): Promise<webcrypto.CryptoKey> {
   try {
     const algorithm = {
-      name: 'AES-GCM',
-      length: 4096,
+      name: 'AES-CBC',
+      length: 2048,
     };
     const extractable = true;
     const generatedKey = await crypto.subtle.generateKey(
@@ -188,8 +188,8 @@ export async function importSymKey(strKey: string): Promise<webcrypto.CryptoKey>
       'raw',
       arrayBuffer,
       {
-        name: 'AES-GCM',
-        length: 4096,
+        name: 'AES-CBC',
+        length: 2048,
       },
       false,
       ['encrypt', 'decrypt']
