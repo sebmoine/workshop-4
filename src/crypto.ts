@@ -51,7 +51,7 @@ export async function exportPubKey(key: webcrypto.CryptoKey): Promise<string> {
 // Export a crypto private key to a base64 string format
 export async function exportPrvKey(key: webcrypto.CryptoKey | null): Promise<string | null> {
   try {
-    const exportedPrivKey = await crypto.subtle.exportKey("jwk", key);
+    const exportedPrivKey = await crypto.subtle.exportKey("pkcs8", key);
     const privKeyBase64Key = arrayBufferToBase64(exportedPrivKey);
   } catch (err) {
     console.error("Error exporting public key:", err);
@@ -213,7 +213,7 @@ export async function symEncrypt(key: webcrypto.CryptoKey,data: string): Promise
     const uint8Data = new TextEncoder().encode(data);
     const encryptedData = await crypto.subtle.encrypt(
       {
-        name: 'AES-GCM',
+        name: 'AES-CBC',
         iv: crypto.getRandomValues(new Uint8Array(12)),
       },
       key,
@@ -241,7 +241,7 @@ export async function symDecrypt(strKey: string,encryptedData: string): Promise<
     const key = await importSymKey(strKey);
     const decryptedData = await crypto.subtle.decrypt(
       {
-        name: 'AES-GCM',
+        name: 'AES-CBC',
         iv: iv,
       },
       key,
