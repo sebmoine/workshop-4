@@ -71,7 +71,7 @@ export async function importPubKey(strKey: string): Promise<webcrypto.CryptoKey>
         hash: 'SHA-256',
       },
       false,
-      ['verify']
+      ['encrypt']
     );
   }
   catch (err) {
