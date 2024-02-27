@@ -39,7 +39,7 @@ export async function generateRsaKeyPair(): Promise<GenerateRsaKeyPair> {
 // Export a crypto public key to a base64 string format
 export async function exportPubKey(key: webcrypto.CryptoKey): Promise<string> {
   try {
-    const exportedPubKey = await crypto.subtle.exportKey("spki", key);
+    const exportedPubKey = await crypto.subtle.exportKey("jwk", key);
     const pubKeyBase64Key = arrayBufferToBase64(exportedPubKey);
   } catch (err) {
     console.error("Error exporting public key:", err);
