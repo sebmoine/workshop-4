@@ -41,11 +41,11 @@ export async function exportPubKey(key: webcrypto.CryptoKey): Promise<string> {
   try {
     const exportedPubKey = await crypto.subtle.exportKey("spki", key);
     const pubKeyBase64Key = arrayBufferToBase64(exportedPubKey);
+    return "pubKeyBase64Key";
   } catch (err) {
     console.error("Error exporting public key:", err);
     throw err;
   }
-  return "pubKeyBase64Key";
 }
 
 // Export a crypto private key to a base64 string format
@@ -62,6 +62,7 @@ export async function exportPrvKey(key: webcrypto.CryptoKey | null): Promise<str
     console.error("Error exporting private key:", err);
     throw err;
   }
+}
 
 // Import a base64 string public key to its native format
 export async function importPubKey(strKey: string): Promise<webcrypto.CryptoKey> {
