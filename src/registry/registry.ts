@@ -38,7 +38,7 @@ export async function launchRegistry() {
     const newNode: Node = {
       nodeId,
       pubKey,
-      privateKey: privateKey.toString(),
+      priKey: privateKey.toString(),
     };
     nodeRegistry.push(newNode);
     res.status(200).send("Node registered successfully");
@@ -56,7 +56,7 @@ export async function launchRegistry() {
       res.status(404).send("Node not found");
       return;
     }
-    const payload = { result: node.privateKey };
+    const payload = { result: node.priKey };
     res.status(200).json(payload);
   });
 
