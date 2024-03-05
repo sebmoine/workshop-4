@@ -2,6 +2,9 @@ import bodyParser from "body-parser";
 import express from "express";
 import { BASE_USER_PORT } from "../config";
 
+let lastReceivedMessage: string | null = null;
+let lastSentMessage: string | null = null;
+
 export type SendMessageBody = {
   message: string;
   destinationUserId: number;
@@ -16,6 +19,14 @@ export async function user(userId: number) {
   _user.get("/status", (req, res) => {
     res.send("live");
   });
+  
+  _user.get("/getLastReceivedMessage", (req, res) => {
+  res.json({ result: lastReceivedMessage });
+});
+  
+  _user.get("/getLastSentMessage", (req, res) => {
+  res.json({ result: lastSentMessage });
+});
 
   const server = _user.listen(BASE_USER_PORT + userId, () => {
     console.log(
