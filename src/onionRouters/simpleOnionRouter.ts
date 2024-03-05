@@ -5,7 +5,7 @@ import { BASE_ONION_ROUTER_PORT } from "../config";
 // Define variables to store messages and destinations
 let encryptedMessage: string | null = null;
 let decryptedMessage: string | null = null;
-let nextDestination: string | null = null;
+let nextDestination: number | null = null;
 
 export async function simpleOnionRouter(nodeId: number) {
   const onionRouter = express();
