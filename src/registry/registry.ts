@@ -12,6 +12,7 @@ export type RegisterNodeBody = {
 export type GetNodeRegistryBody = {
   nodes: Node[];
 };
+const nodeRegistry: Node[] = [];
 
 export async function launchRegistry() {
   const _registry = express();
@@ -21,6 +22,18 @@ export async function launchRegistry() {
   // Implement the status route
   _registry.get("/status", (req, res) => {
     res.send('live');
+  });
+  
+  // Register a new node
+  _registry.post("/registerNode", (req, res) => {
+    const { nodeId, pubKey } = req.body as RegisterNodeBody;
+    if (!nodeId || !pubKey) {
+      res.status(400).send("Invalid request body");
+      return;
+    }
+    const newNode: Node = { nodeId, pubKey };
+    nodeRegistry.push(newNode);
+    res.status(200).send("Node registered successfully");
   });
 
   const server = _registry.listen(REGISTRY_PORT, () => {
