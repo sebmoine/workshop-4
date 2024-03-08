@@ -1,9 +1,8 @@
 import bodyParser from "body-parser";
 import express, { Request, Response } from "express";
 import { REGISTRY_PORT } from "../config";
-import { generateRsaKeyPair, GenerateRsaKeyPair } from "./crypto";
 
-export type Node = { nodeId: number; pubKey: string; priKey: string; };
+export type Node = { nodeId: number; pubKey: string; privKey?: string};
 
 export type RegisterNodeBody = {
   nodeId: number;
@@ -13,7 +12,7 @@ export type RegisterNodeBody = {
 export type GetNodeRegistryBody = {
   nodes: Node[];
 };
-const nodeRegistry: Node[] = [];
+
 
 export async function launchRegistry() {
   const _registry = express();
@@ -25,53 +24,37 @@ export async function launchRegistry() {
     res.send('live');
   });
 
-  // Register a new node
-  _registry.post("/registerNode", async (req, res) => {
-    const { nodeId, pubKey } = req.body as RegisterNodeBody;
+  let nodes: Node[] = [];
 
+  _registry.post('/registerNode', (req, res) => {
+    const {nodeId, pubKey} = req.body;
     if (!nodeId || !pubKey) {
       res.status(400).send("Invalid request body");
       return;
     }
-    const keyPair: GenerateRsaKeyPair = await generateRsaKeyPair();
-    const { publicKey, privateKey } = keyPair;
-    const newNode: Node = {
-      nodeId,
-      pubKey,
-      priKey: privateKey.toString(),
-    };
-    nodeRegistry.push(newNode);
-    res.status(200).send("Node registered successfully");
-  });
+    const nodeExists = nodes.some((node) => node.nodeId === nodeId);
+    const pubKeyExists = nodes.some((node) => node.pubKey === pubKey);
+    console.log(`Registering node: ${nodeId}`);
 
-  // Get the private key of a node
-  _registry.get("/getPrivateKey", (req, res) => {
-    const { nodeId } = req.query;
-    if (!nodeId) {
-      res.status(400).send("Invalid request");
-      return;
+    if (nodeExists) {
+      res.status(400).send("Node already exists");
+    } else if (pubKeyExists) {
+      res.status(400).send("Public key already exists");
+    } else {
+      nodes.push({nodeId, pubKey});
+      res.status(200).send("Node registered successfully");
     }
-    const node = nodeRegistry.find((n) => n.nodeId === Number(nodeId));
-    if (!node) {
-      res.status(404).send("Node not found");
-      return;
-    }
-    const payload = { result: node.priKey };
-    res.status(200).json(payload);
   });
-
 
   // Get the node registry
   _registry.get("/getNodeRegistry", (req, res) => {
-    const registry: GetNodeRegistryBody = {
-      nodes: nodeRegistry,
-    };
+    const registry: GetNodeRegistryBody = { nodes };
     res.status(200).json(registry);
   });
 
-  
   const server = _registry.listen(REGISTRY_PORT, () => {
     console.log(`registry is listening on port ${REGISTRY_PORT}`);
   });
+
   return server;
 }
